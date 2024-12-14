@@ -42,14 +42,14 @@ jobs:
   
       - name: AWS common resources plan
         if: steps.changes.outputs.common == 'true'
+        working-directory: env/common-ap-southeast-1
         run: |
-          cd env/common-ap-southeast-1
           terraform init
           terraform plan -no-color
         
       - name: AWS dev resources plan
         if: steps.changes.outputs.dev == 'true'
+        working-directory: env/dev-ap-southeast-1
         run: |
-          cd env/dev-ap-southeast-1
           terraform init
           terraform plan -no-color
