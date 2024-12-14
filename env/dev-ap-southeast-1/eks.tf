@@ -55,7 +55,7 @@ module "eks" {
     "karpenter.sh/discovery" = var.cluster_name
   }
   eks_managed_node_groups = {
-    worker-nonprod = {
+    worker-dev = {
       bootstrap_extra_args = "--container-runtime containerd --kubelet-extra-args '--max-pods=110'"
       desired_size         = 2
       max_size             = 2
@@ -80,13 +80,9 @@ module "eks" {
 
       iam_role_additional_policies = {
         AmazonSSMManagedInstanceCore = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
-        # route53 full access
-        AmazonRoute53FullAccess = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonRoute53FullAccess"
-        AmazonEKSClusterPolicy  = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonEKSClusterPolicy"
+        AmazonEKSClusterPolicy       = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonEKSClusterPolicy"
       }
-      labels = {
-        "lifecycle" = "OnDemand"
-      }
+      labels = {}
 
       tags = {
         Terraform = "true"
@@ -101,5 +97,23 @@ module "eks" {
     Env       = "${local.env}"
     Team      = "DevOps"
   }
-
+  ## eks authen
+  manage_aws_auth_configmap = true
+  aws_auth_roles = [
+    {
+      rolearn  = module.karpenter.node_iam_role_arn
+      username = "system:node:{{EC2PrivateDNSName}}"
+      groups = [
+        "system:bootstrappers",
+        "system:nodes",
+      ]
+    },
+  ]
+  aws_auth_users = [
+    {
+      userarn  = "arn:aws:iam::267583709295:user/tony"
+      username = "tony"
+      groups   = ["system:masters"]
+    },
+  ]
 }
