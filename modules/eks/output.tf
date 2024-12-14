@@ -21,3 +21,8 @@ output "cluster_certificate_authority_data" {
   description = "The base64 encoded certificate data required to communicate with your cluster"
   value       = module.eks.cluster_certificate_authority_data
 }
+
+output "eks_managed_node_groups" {
+  description = "List of managed node groups"
+  value       = module.eks.managed_node_groups
+}
