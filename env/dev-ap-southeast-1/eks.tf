@@ -37,10 +37,6 @@ module "eks" {
     eks-pod-identity-agent = {
       most_recent = true
     }
-
-    ebs-csi-driver = {
-      most_recent = true
-    }
   }
   cluster_security_group_additional_rules = {
     ingress_nodes_karpenter_ports_tcp = {
