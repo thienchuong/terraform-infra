@@ -36,9 +36,9 @@ jobs:
         id: changes
         with:
           filters: |
-            dev:
-              - 'env/common-ap-southeast-1/**'
             common:
+              - 'env/common-ap-southeast-1/**'
+            dev:
               - 'env/dev-ap-southeast-1/**'
 
       - name: AWS common resources deploy
