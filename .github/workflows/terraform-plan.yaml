@@ -50,7 +50,7 @@ jobs:
         if: steps.changes.outputs.common == 'true'
         id: common-plan
         working-directory: env/common-ap-southeast-1
-        run: terraform plan -no-color
+        run: ls -la
         
       - name: AWS dev resources init
         if: steps.changes.outputs.dev == 'true'
