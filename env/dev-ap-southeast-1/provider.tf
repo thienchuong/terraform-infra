@@ -26,6 +26,7 @@ provider "kubernetes" {
 }
 
 
+
 provider "aws" {
   region = "ap-southeast-1"
 }
