@@ -84,6 +84,12 @@ variable "eks_managed_node_groups" {
   default     = {}
 }
 
+variable "enable_cluster_creator_admin_permissions" {
+  description = "Determines whether to enable the IAM user or role that created the EKS cluster to administer the cluster"
+  type        = bool
+  default     = false
+}
+
 #############################################
 #                   eks-aws-auth            #
 #############################################

@@ -14,5 +14,6 @@ module "eks" {
   cluster_security_group_additional_rules = var.cluster_security_group_additional_rules
   node_security_group_tags                = var.node_security_group_tags
   eks_managed_node_groups                 = var.eks_managed_node_groups
+  enable_cluster_creator_admin_permissions = var.enable_cluster_creator_admin_permissions
   tags                                    = var.tags
 }
