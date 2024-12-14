@@ -18,9 +18,9 @@ module "zones" {
   }
 }
 
-# verify owner of domain chuong.click
+# # verify owner of domain chuong.click
 # resource "aws_route53_record" "chuong-click" {
-#   name    = "${module.chuong-click.distinct_domain_names}"
+#   name    = "${module.chuong-click.validation_domains}"
 #   records = ["${module.chuong-click.validation_route53_record_fqdns}"]
 #   ttl     = "300"
 #   type    = "CNAME"
