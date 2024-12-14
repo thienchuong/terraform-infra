@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v3
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           terraform_version: ${{ env.TF_VERSION }}
@@ -50,7 +50,7 @@ jobs:
         if: steps.changes.outputs.common == 'true'
         id: common-plan
         working-directory: env/common-ap-southeast-1
-        run: ls -la
+        run: terraform plan -no-color
         
       - name: AWS dev resources init
         if: steps.changes.outputs.dev == 'true'
