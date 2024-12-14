@@ -24,5 +24,5 @@ output "cluster_certificate_authority_data" {
 
 output "eks_managed_node_groups" {
   description = "List of managed node groups"
-  value       = module.eks.managed_node_groups
+  value       = module.eks.eks_managed_node_groups
 }
