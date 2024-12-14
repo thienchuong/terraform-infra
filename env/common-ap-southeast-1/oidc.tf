@@ -9,6 +9,5 @@ module "github-oidc" {
   oidc_role_attach_policies = ["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"]
   tags = {
     Terraform = "true"
-    Env       = local.env
   }
 }
