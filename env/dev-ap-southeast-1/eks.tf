@@ -1,6 +1,7 @@
 locals {
   cluster_name = "cluster-dev"
   env          = "dev"
+  account_id   = data.aws_caller_identity.current.account_id
 }
 
 module "eks" {
@@ -9,11 +10,11 @@ module "eks" {
   cluster_name                    = local.cluster_name
   cluster_version                 = "1.30"
   vpc_id                          = module.eks-vpc.vpc_id
-  subnet_ids                      = module.eks-vpc.subnet_ids
+  subnet_ids                      = module.eks-vpc.private_subnets
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
   enable_irsa                     = true
-  cluster_enabled_log_types       = false
+  cluster_enabled_log_types       = []
   create_cloudwatch_log_group     = false
   cluster_addons = {
     vpc-cni = {
@@ -52,7 +53,7 @@ module "eks" {
     }
   }
   node_security_group_tags = {
-    "karpenter.sh/discovery" = var.cluster_name
+    "karpenter.sh/discovery" = local.cluster_name
   }
   eks_managed_node_groups = {
     worker-dev = {
@@ -86,7 +87,7 @@ module "eks" {
 
       tags = {
         Terraform = "true"
-        Env       = "${local.env}"
+        Env       = local.env
         Team      = "DevOps"
       }
       taints = {}
@@ -94,10 +95,15 @@ module "eks" {
   }
   tags = {
     Terraform = "true"
-    Env       = "${local.env}"
+    Env       = local.env
     Team      = "DevOps"
   }
-  ## eks authen
+}
+
+# eks authen
+module "eks-aws-auth" {
+  source                    = "terraform-aws-modules/eks/aws//modules/aws-auth"
+  version                   = "~> 20.0"
   manage_aws_auth_configmap = true
   aws_auth_roles = [
     {

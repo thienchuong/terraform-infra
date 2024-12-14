@@ -41,9 +41,9 @@ module "external_dns_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.30"
 
-  role_name                     = "external-dns-nonprod"
+  role_name                     = "external-dns-${local.env}"
   attach_external_dns_policy    = true
-  external_dns_hosted_zone_arns = ["arn:aws:route53:::hostedzone/Z040215132A84TNL9P2LD", "arn:aws:route53:::hostedzone/Z022554613JGCT6EMC7EO", "arn:aws:route53:::hostedzone/Z04644372VVDZPFYMCAMG", "arn:aws:route53:::hostedzone/Z01748452X00JNN3Y9PMZ"]
+  external_dns_hosted_zone_arns = [""]
 
   oidc_providers = {
     main = {
@@ -60,9 +60,9 @@ module "external_dns_irsa_role" {
 ################################################################################
 # Loki logs policy
 ################################################################################
-resource "aws_iam_policy" "loki-logs-nonprod" {
+resource "aws_iam_policy" "loki-logs-dev" {
 
-  name        = "loki-logs-nonprod"
+  name        = "loki-logs-${local.env}"
   description = "Policy for Loki to access S3 buckets."
 
   policy = jsonencode({
@@ -73,8 +73,8 @@ resource "aws_iam_policy" "loki-logs-nonprod" {
         Effect = "Allow"
         Action = ["s3:*"]
         Resource = [
-          "arn:aws:s3:::${module.loki-logs-nonprod.s3_bucket_id}/*",
-          "arn:aws:s3:::${module.loki-logs-nonprod.s3_bucket_id}"
+          "arn:aws:s3:::${module.loki-logs-dev.s3_bucket_id}/*",
+          "arn:aws:s3:::${module.loki-logs-dev.s3_bucket_id}"
         ]
       }
     ]
@@ -85,9 +85,9 @@ module "loki_logs_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.30"
 
-  role_name = "loki-logs-nonprod"
+  role_name = "loki-logs-${local.env}"
   role_policy_arns = {
-    main = aws_iam_policy.loki-logs-nonprod.arn
+    main = aws_iam_policy.loki-logs-dev.arn
   }
 
   oidc_providers = {
