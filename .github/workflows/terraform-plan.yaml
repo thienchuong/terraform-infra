@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize]
 
 env:
-  TF_VERSION: 1.9.0
+  TF_VERSION: 1.10.2
   AWS_REGION: ap-southeast-1
   ROLE-TO-ASSUME: arn:aws:iam::267583709295:role/Terraform
 
@@ -50,7 +50,7 @@ jobs:
         if: steps.changes.outputs.common == 'true'
         id: common-plan
         working-directory: env/common-ap-southeast-1
-        run: terraform plan -no-color
+        run: terraform plan
         
       - name: AWS dev resources init
         if: steps.changes.outputs.dev == 'true'
@@ -62,4 +62,4 @@ jobs:
         if: steps.changes.outputs.dev == 'true'
         id: dev-plan
         working-directory: env/dev-ap-southeast-1
-        run: terraform plan -no-color
+        run: terraform plan

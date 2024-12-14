@@ -14,7 +14,7 @@ module "chuong-click" {
   wait_for_validation = false
 
   tags = {
-    Environment = "prod"
+    Environment = "${local.env}"
     Terraform   = "true"
   }
 }

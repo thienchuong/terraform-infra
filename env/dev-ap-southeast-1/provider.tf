@@ -1,8 +1,8 @@
-terraform { 
-  cloud { 
-    organization = "toni-assignment" 
-    workspaces { 
-      name = "dev-ap-southeast-1" 
+terraform {
+  cloud {
+    organization = "toni-assignment"
+    workspaces {
+      name = "dev-ap-southeast-1"
     }
   }
   required_providers {

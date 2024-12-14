@@ -6,25 +6,25 @@ locals {
 module "eks" {
   source = "../../modules/eks"
 
-  cluster_name = local.cluster_name
-  cluster_version                         = "1.30"
-  vpc_id                                  = module.eks-vpc.vpc_id
-  subnet_ids                              = module.eks-vpc.subnet_ids
-  cluster_endpoint_public_access          = true
-  cluster_endpoint_private_access         = true
-  enable_irsa                             = true
-  cluster_enabled_log_types               = false
-  create_cloudwatch_log_group             = false
-  cluster_addons                          = {
+  cluster_name                    = local.cluster_name
+  cluster_version                 = "1.30"
+  vpc_id                          = module.eks-vpc.vpc_id
+  subnet_ids                      = module.eks-vpc.subnet_ids
+  cluster_endpoint_public_access  = true
+  cluster_endpoint_private_access = true
+  enable_irsa                     = true
+  cluster_enabled_log_types       = false
+  create_cloudwatch_log_group     = false
+  cluster_addons = {
     vpc-cni = {
       before_compute = true
       most_recent    = true
       configuration_values = jsonencode({
         env = {
-          ENABLE_PREFIX_DELEGATION  = "true"
-          WARM_PREFIX_TARGET        = "1"
+          ENABLE_PREFIX_DELEGATION = "true"
+          WARM_PREFIX_TARGET       = "1"
         }
-          "enableNetworkPolicy" : "true",
+        "enableNetworkPolicy" : "true",
       })
     }
     kube-proxy = {
@@ -51,10 +51,10 @@ module "eks" {
       source_node_security_group = true
     }
   }
-  node_security_group_tags          = {
+  node_security_group_tags = {
     "karpenter.sh/discovery" = var.cluster_name
   }
-  eks_managed_node_groups                 = {
+  eks_managed_node_groups = {
     worker-nonprod = {
       bootstrap_extra_args = "--container-runtime containerd --kubelet-extra-args '--max-pods=110'"
       desired_size         = 2
@@ -82,7 +82,7 @@ module "eks" {
         AmazonSSMManagedInstanceCore = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
         # route53 full access
         AmazonRoute53FullAccess = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonRoute53FullAccess"
-        AmazonEKSClusterPolicy        = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonEKSClusterPolicy"
+        AmazonEKSClusterPolicy  = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonEKSClusterPolicy"
       }
       labels = {
         "lifecycle" = "OnDemand"
@@ -90,13 +90,16 @@ module "eks" {
 
       tags = {
         Terraform = "true"
-        Env       = "nonprod"
-        Name      = "eks-nonprod"
+        Env       = "${local.env}"
         Team      = "DevOps"
       }
       taints = {}
     }
   }
-  tags                                    = var.tags
-  
+  tags = {
+    Terraform = "true"
+    Env       = "${local.env}"
+    Team      = "DevOps"
+  }
+
 }
