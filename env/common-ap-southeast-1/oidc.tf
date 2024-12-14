@@ -7,5 +7,4 @@ module "github-oidc" {
 
   repositories              = ["thienchuong/backend", "thienchuong/frontend"]
   oidc_role_attach_policies = ["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"]
-
 }
