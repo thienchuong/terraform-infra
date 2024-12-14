@@ -43,7 +43,7 @@ module "external_dns_irsa_role" {
 
   role_name                     = "external-dns-${local.env}"
   attach_external_dns_policy    = true
-  external_dns_hosted_zone_arns = ["${module.zones.route53_zone_arns}"]
+  external_dns_hosted_zone_arns = ["${module.zones.route53_zone_zone_arn}"]
 
   oidc_providers = {
     main = {
